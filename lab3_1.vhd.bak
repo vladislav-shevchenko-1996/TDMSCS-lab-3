@@ -1,0 +1,73 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+entity lab3 is
+ Port (
+ clk : in STD_LOGIC; -- 50 MHz
+ uart_rx : in STD_LOGIC; -- RX pin
+ ledr : out STD_LOGIC_VECTOR(7 downto 0) -- LED показують прийняті
+дані
+ );
+end lab3;
+architecture Behavioral of lab3 is
+ constant BAUD_DIV : integer := 5208; -- 50MHz / 9600 baud
+
+ signal counter : integer range 0 to BAUD_DIV-1 := 0;
+ signal bit_count : integer range 0 to 10 := 0;
+ signal rx_sync : std_logic_vector(1 downto 0) := "11";
+ signal receiving : std_logic := '0';
+ signal rx_data : std_logic_vector(7 downto 0) := (others => '0');
+ signal received_byte : std_logic_vector(7 downto 0) := (others => '0');
+
+begin
+
+ -- Input synchronizer
+ process(clk)
+ begin
+ if rising_edge(clk) then
+ rx_sync <= rx_sync(0) & uart_rx;
+ end if;
+ end process;
+ -- UART receiver with integrated baud rate generator
+ process(clk)
+ begin
+ if rising_edge(clk) then
+ -- Default counter increment
+ counter <= counter + 1;
+
+ -- Detect start bit
+ if receiving = '0' and rx_sync = "10" then -- falling edge
+ receiving <= '1';
+ bit_count <= 0;
+ counter <= BAUD_DIV/2; -- start in middle of bit
+ end if;
+
+ -- UART reception
+ if receiving = '1' and counter = BAUD_DIV-1 then
+ counter <= 0; -- reset counter for next bit
+
+ case bit_count is
+ when 0 => -- start bit (skip)
+ bit_count <= bit_count + 1;
+ when 1 to 8 => -- data bits
+ rx_data(bit_count - 1) <= rx_sync(1);
+ bit_count <= bit_count + 1;
+ when 9 => -- stop bit
+ if rx_sync(1) = '1' then -- valid stop bit
+ received_byte <= rx_data;
+ end if;
+ receiving <= '0';
+ bit_count <= 0;
+ when others =>
+ receiving <= '0';
+ bit_count <= 0;
+ end case;
+ elsif counter = BAUD_DIV-1 then
+ counter <= 0; -- reset counter when not receiving
+ end if;
+ end if;
+ end process;
+
+ ledr <= received_byte; -- LED показують прийнятий байт
+
+end Behavioral;

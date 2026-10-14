@@ -1,0 +1,36 @@
+# do Lab3.do
+# ** Warning: (vlib-34) Library already exists at "work".
+# 
+# Model Technology ModelSim ALTERA vlog 10.3d Compiler 2014.10 Oct  7 2014
+# Start time: 15:56:42 on Oct 14,2026
+# vlog -work work Lab3.vo 
+# -- Compiling module lab3_1
+# 
+# Top level modules:
+# 	lab3_1
+# End time: 15:56:42 on Oct 14,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim ALTERA vlog 10.3d Compiler 2014.10 Oct  7 2014
+# Start time: 15:56:42 on Oct 14,2026
+# vlog -work work Lab3_1.vwf.vt 
+# -- Compiling module lab3_1_vlg_sample_tst
+# -- Compiling module lab3_1_vlg_check_tst
+# -- Compiling module lab3_1_vlg_vec_tst
+# 
+# Top level modules:
+# 	lab3_1_vlg_vec_tst
+# End time: 15:56:42 on Oct 14,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vsim -c -do "Lab3.do" 
+# Start time: 15:56:42 on Oct 14,2026
+# Loading work.lab3_1_vlg_vec_tst
+# Loading work.lab3_1
+# Loading altera_ver.dffeas
+# Loading work.lab3_1_vlg_sample_tst
+# Loading work.lab3_1_vlg_check_tst
+# Loading altera_ver.PRIM_GDFF_LOW
+# Simulation passed !
+# ** Note: $finish    : Lab3_1.vwf.vt(276)
+#    Time: 6 us  Iteration: 0  Instance: /lab3_1_vlg_vec_tst/tb_out
+# End time: 15:56:43 on Oct 14,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
